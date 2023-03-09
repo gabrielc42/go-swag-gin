@@ -1,0 +1,3 @@
+package usercontrollers
+
+func register() {}
