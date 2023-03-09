@@ -1,18 +1,20 @@
 package todocontrollers
 
 import (
-	configuration "/api/configuration"
-	constants "/api/constant"
-	helper "/api/helpers"
-	models "/api/models/todo"
 	"net/http"
 	"reflect"
 	"time"
 
+	configuration "github.com/gabrielc42/api/configuration"
+	constants "github.com/gabrielc42/api/constant"
+	helper "github.com/gabrielc42/api/helpers"
+	models "github.com/gabrielc42/api/models/todo"
+	"github.com/gin-gonic/gin"
+
 	"gopkg.in/mgo.v2/bson"
 )
 
-func createTodo() {
+func createTodo(c *gin.Context) {
 	var Todo models.Todo
 	val := reflect.ValueOf(c.Keys["user_id"])
 
@@ -28,7 +30,7 @@ func createTodo() {
 		return
 	}
 
-	if Todo.name == "" {
+	if Todo.Name == "" {
 		helper.respondWithError(c, http.StatusBadRequest, "Please provide valid name.")
 		return
 	}
@@ -43,9 +45,9 @@ func createTodo() {
 	err := getCollection.Insert(Todo)
 
 	if err != nil {
-		helper.RespondWithError(c, http.StatusBadRequest, err.Error())
+		helper.respondWithError(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	helper.RespondWithSuccess(c, http.StatusOK, constants.TodoCreatedSuccess, Todo)
+	helper.respondWithSuccess(c, http.StatusOK, constants.TodoCreatedSuccess, Todo)
 }
