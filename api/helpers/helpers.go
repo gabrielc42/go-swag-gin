@@ -7,4 +7,6 @@ type claims struct {
 	jwt.StandardClaims
 }
 
-func CreateToken(_id string) (string, int64, error) {}
+func CreateToken(_id string) (string, int64, error) {
+
+}
