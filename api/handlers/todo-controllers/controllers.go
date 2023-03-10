@@ -9,8 +9,10 @@ import (
 	constants "github.com/gabrielc42/api/constant"
 	helper "github.com/gabrielc42/api/helpers"
 	models "github.com/gabrielc42/api/models/todo"
+
 	"github.com/gin-gonic/gin"
 
+	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -35,7 +37,7 @@ func createTodo(c *gin.Context) {
 		return
 	}
 
-	mongoSession := configuration.ConnectDb(constants.Database)
+	mongoSession := configuration.connectDb(constants.Database)
 	defer mongoSession.Close()
 
 	sessionCopy := mongoSession.Copy()
