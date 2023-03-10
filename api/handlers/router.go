@@ -39,7 +39,7 @@ func Router() *gin.Engine {
 			{
 				todoGroup.GET("getTodos", todoController.GetTodos)                //get TODOs
 				todoGroup.POST("create", todoController.CreateTodo)               //create TODO
-				todoGroup.GET("getTodo/:todoId", todoController.GetTodo)          //create TODO
+				todoGroup.GET("getTodo/:todoId", todoController.GetTodos)         //create TODO
 				todoGroup.PATCH("updateTodo/:todoId", todoController.UpdateTodo)  //get TODOs
 				todoGroup.DELETE("deleteTodo/:todoId", todoController.DeleteTodo) //get TODOs
 			}
