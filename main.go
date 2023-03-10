@@ -1,9 +1,10 @@
 package main
 
 import (
-	router "/api/Handlers"
 	"fmt"
 	"os"
+
+	router "github.com/gabrielc42/api/Handlers"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"

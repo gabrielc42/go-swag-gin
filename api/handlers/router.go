@@ -3,9 +3,12 @@ package router
 import (
 	"net/http"
 
-	todoController "github.com/gabrielc42"
+	todoController "github.com/gabrielc42/api/handlers/todo-controllers"
+	userController "github.com/gabrielc42/api/handlers/user-controllers"
+	middleware "github.com/gabrielc42/api/middlewares"
 
 	"github.com/gin-gonic/gin"
+	cors "github.com/rs/cors/wrapper/gin"
 )
 
 func Router() *gin.Engine {

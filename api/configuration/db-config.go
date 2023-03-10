@@ -7,7 +7,7 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
-func connectDb(Db string) (mongoSession *mgo.Session) {
+func ConnectDb(Db string) (mongoSession *mgo.Session) {
 	mongoDBDialInfo := &mgo.DialInfo{
 		Addrs:    []string{"127.0.0.1:27017"},
 		Timeout:  60 * time.Second,

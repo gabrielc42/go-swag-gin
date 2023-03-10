@@ -12,11 +12,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
-func createTodo(c *gin.Context) {
+func CreateTodo(c *gin.Context) {
 	var Todo models.Todo
 	val := reflect.ValueOf(c.Keys["user_id"])
 
@@ -28,28 +27,28 @@ func createTodo(c *gin.Context) {
 	jsonErr := c.BindJSON(&Todo)
 
 	if jsonErr != nil {
-		helper.respondWithError(c, http.StatusBadRequest, jsonErr)
+		helper.RespondWithError(c, http.StatusBadRequest, jsonErr)
 		return
 	}
 
 	if Todo.Name == "" {
-		helper.respondWithError(c, http.StatusBadRequest, "Please provide valid name.")
+		helper.RespondWithError(c, http.StatusBadRequest, "Please provide valid name.")
 		return
 	}
 
-	mongoSession := configuration.connectDb(constants.Database)
+	mongoSession := configuration.ConnectDb(constants.Database)
 	defer mongoSession.Close()
 
 	sessionCopy := mongoSession.Copy()
 	defer sessionCopy.Close()
 
-	getCollection := sessionCopy.Db(constants.Database).c("todo")
+	getCollection := sessionCopy.DB(constants.Database).c("todo")
 	err := getCollection.Insert(Todo)
 
 	if err != nil {
-		helper.respondWithError(c, http.StatusBadRequest, err.Error())
+		helper.RespondWithError(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	helper.respondWithSuccess(c, http.StatusOK, constants.TodoCreatedSuccess, Todo)
+	helper.RespondWithSuccess(c, http.StatusOK, constants.TodoCreatedSuccess, Todo)
 }

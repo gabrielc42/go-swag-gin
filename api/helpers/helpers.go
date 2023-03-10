@@ -32,14 +32,14 @@ func createToken(_id string) (string, int64, error) {
 	return token, expires, nil
 }
 
-func respondWithError(c *gin.Context, code int, message interface{}) {
+func RespondWithError(c *gin.Context, code int, message interface{}) {
 	c.AbortWithStatusJSON(code, gin.H{
 		"error":  message,
 		"status": false,
 	})
 }
 
-func respondWithSuccess(c *gin.Context, code int, message string, data interface{}) {
+func RespondWithSuccess(c *gin.Context, code int, message string, data interface{}) {
 	c.AbortWithStatusJSON(code, gin.H{
 		"data":    data,
 		"message": message,
@@ -47,7 +47,7 @@ func respondWithSuccess(c *gin.Context, code int, message string, data interface
 	})
 }
 
-func validateSignupInput(user modelUser.User) string {
+func ValidateSignupInput(user modelUser.User) string {
 	var errMsg string
 
 	if user.FirstName == "" {
@@ -78,7 +78,7 @@ func validateSignupInput(user modelUser.User) string {
 	return ""
 }
 
-func validateLoginInput(user modelUser.UserLogin) string {
+func ValidateLoginInput(user modelUser.UserLogin) string {
 	var errMsg string
 
 	if user.Email == "" {
@@ -94,7 +94,7 @@ func validateLoginInput(user modelUser.UserLogin) string {
 	return ""
 }
 
-func validateTodoInput(todo modelTodo.Todo) string {
+func ValidateTodoInput(todo modelTodo.Todo) string {
 	var errMsg string
 
 	if todo.Name == "" {
