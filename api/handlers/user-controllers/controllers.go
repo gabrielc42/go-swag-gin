@@ -1,6 +1,7 @@
 package usercontrollers
 
 import (
+	"encoding/json"
 	"net/http"
 	"time"
 
@@ -90,4 +91,45 @@ func Register(c *gin.Context) {
 	}
 
 	helper.RespondWithSuccess(c, http.StatusOK, CONSTANTS.CreatedSuccessfully, userData)
+}
+
+func Login(c *gin.Context) {
+	var Login models.UserLogin
+	var userData models.User
+
+	userErr := json.NewDecoder(c.Request.Body).Decode(&Login)
+	LoginErr := helper.ValidateLoginInput(Login)
+	if LoginErr != "" {
+		helper.RespondWithError(c, http.StatusBadRequest, LoginErr)
+		return
+	}
+	if userErr != nil {
+		helper.RespondWithError(c, http.StatusBadRequest, userErr)
+		return
+	}
+
+	mongoSession := configuration.ConnectDb(CONSTANTS.Database)
+	defer mongoSession.Close()
+
+	sessionCopy := mongoSession.Copy()
+	defer sessionCopy.Close()
+
+	getCollection := sessionCopy.DB(CONSTANTS.Database).C("user")
+
+	err := getCollection.Find(bson.M{"email": Login.Email}).One(&userData)
+	if err != nil {
+		helper.RespondWithError(c, http.StatusBadRequest, CONSTANTS.AccountNotExists)
+		return
+	}
+
+	PassErr := bcrypt.CompareHashAndPassword([]byte(userData.Password), []byte(Login.Password))
+	if PassErr != nil {
+		helper.RespondWithError(c, http.StatusBadRequest, CONSTANTS.IncorrectPassword)
+		return
+	}
+	token, expire, _ := helper.CreateToken(userData.ID.Hex())
+	userData.TokenExpiresAt = expire
+	userData.Token = token
+	err = getCollection.UpdateId(bson.ObjectIdHex(userData.ID.Hex()), userData)
+	helper.RespondWithSuccess(c, http.StatusOK, CONSTANTS.LoggedInSuccess, userData)
 }
