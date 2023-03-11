@@ -18,7 +18,7 @@ type claims struct {
 	jwt.StandardClaims
 }
 
-func createToken(_id string) (string, int64, error) {
+func CreateToken(_id string) (string, int64, error) {
 	atClaims := jwt.MapClaims{}
 	atClaims["authorized"] = true
 	atClaims["user_id"] = _id

@@ -79,4 +79,15 @@ func Register(c *gin.Context) {
 	userData.TokenExpiresAt = expire
 
 	err := getCollection.Insert(userData)
+
+	if err != nil {
+		if mgo.IsDup(err) == true {
+			helper.RespondWithError(c, http.StatusBadRequest, CONSTANTS.AccountAlreadyExists)
+			return
+		}
+		helper.RespondWithError(c, http.StatusBadRequest, err)
+		return
+	}
+
+	helper.RespondWithSuccess(c, http.StatusOK, CONSTANTS.CreatedSuccessfully, userData)
 }
