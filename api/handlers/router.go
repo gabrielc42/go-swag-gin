@@ -51,6 +51,6 @@ func Router() *gin.Engine {
 			})
 		}
 	}
-	
+
 	return router
 }
